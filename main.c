@@ -5,7 +5,7 @@
 int main(int argc, char **argv){
 
     FILE *file;
-    int **matriz,rows,cols;
+    int **matriz,rows,cols,*posi,quant,contador=0,cont=0;
 
     // for (int i = 0; i < argc; ++i) {
     //     printf("argv[%d]: %s\n", i, argv[i]);
@@ -14,18 +14,38 @@ int main(int argc, char **argv){
     file = openFile(argv[2]);
     fscanf(file,"%d %d",&rows,&cols);
 
-    printf("Linhas: %d Colunas:%d \n", rows, cols);
-
     matriz = alocaMatriz(rows, cols);
     matriz = montaTabuleiro(file, matriz, rows, cols);
 
-    // Criar a função para montar o tabuleiro colocando as peças nas casas. Para isso
-    // A função terá como parâmetro a matriz e o arquivo.
-    // Dentro da função pegar a quantidade de linhas e colunas e realizar o for do arquivo aeds3
-    // e desenvolver  a lógica de como será a forma de contagem das jogadas de maneira recursiva ou n;
+    //Encontra uns
+    printf("Linhas %d Colunas %d", rows, cols);
+
+    posi = quantidade(matriz, rows, cols);
+    quant = posi[200];
+
+    int **mirror[quant];
+
+    for(int i=0; i<quant;i++){
+
+        mirror[i] = alocaMatriz(rows, cols);
+        mirror[i] = montaTabuleiro(file, mirror[i], rows, cols);
+        contador = encontraDiagonal(mirror[i],posi[2*i],posi[(2*i)+1]);
+        if (contador > cont){
+            cont = contador;
+        }    
+    }
+
+    imprimeMatriz(matriz,rows,cols);
+
+    for(int i=0; i<quant;i++){
+
+        desalocaMatriz(mirror[i] ,rows);
+    }
 
     desalocaMatriz(matriz,rows);
-    fclose(file);
+    free(posi);
+    printf("%d",cont);
 
+    fclose(file);
     return 0;
 }
