@@ -20,6 +20,6 @@ int **montaTabuleiro(FILE *, int **, int, int);
 void imprimeMatriz(int **, int, int);
 
 int *quantidade(int **,int, int);
-int encontraDiagonal(int **,int ,int);
+int encontraDiagonal(int **,int ,int ,int ,int);
 
 #endif

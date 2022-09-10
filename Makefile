@@ -2,7 +2,7 @@ all: programa
 
 run: programa
 
-programa: main.o menu.o sort.o
+programa: main.o tp1.o 
 	gcc main.o menu.o sort.o -o programa
 
 main.o: main.c
@@ -15,4 +15,4 @@ sort.o: sort.c sort.h
 	gcc -c sort.c 
 
 clean:
-	rm  *.o programa
+	rm -r *.o programa

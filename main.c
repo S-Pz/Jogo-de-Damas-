@@ -5,46 +5,49 @@
 int main(int argc, char **argv){
 
     FILE *file;
-    int **matriz,rows,cols,*posi,quant,contador=0,cont=0;
+    int **matriz, rows = 0 , cols = 0, *posi, quant = 0, contador, cont = 0;
 
+    //Verficar se a entrada(coluna) é par ou impar, para alterar a forma de montar o tabuleiro
     // for (int i = 0; i < argc; ++i) {
     //     printf("argv[%d]: %s\n", i, argv[i]);
     // }
-
+    
     file = openFile(argv[2]);
-    fscanf(file,"%d %d",&rows,&cols);
+
+    fscanf(file,"%d %d", &rows, &cols);
 
     matriz = alocaMatriz(rows, cols);
     matriz = montaTabuleiro(file, matriz, rows, cols);
 
-    //Encontra uns
-    printf("Linhas %d Colunas %d", rows, cols);
-
     posi = quantidade(matriz, rows, cols);
     quant = posi[200];
 
-    int **mirror[quant];
+    int **mirror;
+    
+    for(int i=0; i<quant;++i){
 
-    for(int i=0; i<quant;i++){
+        // mirror = alocaMatriz(rows, cols);
+        // //imprimeMatriz(mirror, rows, cols);
+        // mirror = montaTabuleiro(file, mirror, rows, cols);
+        // contador = 0;
+        // contador = encontraDiagonal(mirror, posi[2*i], posi[(2*i)+1],contador,cont);
+        
+        // desalocaMatriz(mirror, rows);
 
-        mirror[i] = alocaMatriz(rows, cols);
-        mirror[i] = montaTabuleiro(file, mirror[i], rows, cols);
-        contador = encontraDiagonal(mirror[i],posi[2*i],posi[(2*i)+1]);
+        contador = 0;
+        contador = encontraDiagonal(matriz, posi[2*i], posi[(2*i)+1],contador,cont);   
+
         if (contador > cont){
             cont = contador;
-        }    
+        } 
+        
     }
+    
+    //imprimeMatriz(matriz, rows, cols);
 
-    imprimeMatriz(matriz,rows,cols);
-
-    for(int i=0; i<quant;i++){
-
-        desalocaMatriz(mirror[i] ,rows);
-    }
-
-    desalocaMatriz(matriz,rows);
+    desalocaMatriz(matriz, rows);
     free(posi);
-    printf("%d",cont);
+    printf("RESULTADO FINAL: %d", cont);
 
     fclose(file);
     return 0;
