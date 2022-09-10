@@ -2,13 +2,6 @@
 #include<stdlib.h>
 #include"tp1.h"
 
-//Criar a função para criar a  matriz juntamente com a questão da alocação
-typedef struct valores{
-
-  int *posi;
-  int a;
-
-}VALORES;
 
 FILE *openFile(char *file){
   
@@ -38,7 +31,6 @@ int **alocaMatriz(int rows, int cols){
   for (int i=0; i<rows; i++){
     x[i] = malloc(cols * sizeof *x[i]);
   }
-
   return x;
 }
 
@@ -57,20 +49,18 @@ int **montaTabuleiro(FILE *arq, int **matriz, int rows, int cols){
   for(int i = 0; i<rows; i++){
 
     if((i%2) == 0){
-      j=0;
-            
+      j=0;      
     }else{      
       j=1;
-
     }
+
     while(j<cols){
 
       fscanf(arq, "%d", &a);
       matriz[i][j]= a;
-      //printf("%d ", matriz[i][j]);
+      printf ("montando: %d \n", a); // coloquei aqui um printf
       j=j+2;
     }
-    //printf("\n");
   }
   return matriz;
 }
@@ -88,6 +78,7 @@ void imprimeMatriz(int **matriz, int rows, int cols){
     }
 
     while(j<cols){
+
       printf(" %d ",matriz[i][j]);
       j = j+2;
     }
@@ -98,7 +89,7 @@ int *quantidade(int **matriz,int rows, int cols){
 
   int j=0,a=0,*posi,b=0;
 
-    posi = malloc( sizeof(int) *200);
+  posi = malloc( sizeof(int) *200);
     
   for(int i=0; i<rows; i++){
     if(i%2 == 0){
@@ -118,14 +109,155 @@ int *quantidade(int **matriz,int rows, int cols){
         posi[b] = j;
         
         a++;
-
         posi[200] = a;
       }
     }
   }
-  printf("quantiade de uns: %d \n", a);
   return posi;
 }
-int encontraDiagonal(int **matriz,int i,int j){
+int encontraDiagonal(int **matriz, int i, int j, int contador, int cont){
 
+  int n = i;
+  int m = j;
+
+  printf("dentro do Encontra Diagonal");
+
+
+
+// ENCONTRA DIAGONAL SUPERIOR ESQUERDA
+
+  i++ , j--;  
+  if ( i >= 0 && j >= 0 && i < n && j < m) {
+   if ( matriz [i][j] == 2 ){
+    printf("encontrou o 2 \n");
+    i++, j--;
+    if ( i >= 0 && j >= 0 && i < n && j< m) {
+     if ( matriz [i][j] == 0 ){
+      printf("encontrou o 0 \n");
+       contador++;
+       matriz [i][j] = 1;
+
+       if ( contador > cont ){
+         cont = contador;
+         }
+
+        i--, j++;
+        matriz [i][j] = 0;
+        i--, j++;
+        matriz [i][j] = 0;
+        i++, j--;
+        i++, j--;
+        contador = encontraDiagonal(matriz ,i , j, contador, cont);
+        contador--;
+      }
+    }
+    i--, j++;
+    matriz [i][j] = 2;
+   }
+  }
+  i--, j++;
+  matriz [i][j] = 1;
+
+
+// ENCONTRA DIAGONAL SUPERIOR DIREITA
+
+  i++ , j++;  
+  if ( i >= 0 && j >= 0 && i < n && j < m) {
+   if ( matriz [i][j] == 2 ){
+    printf("encontrou o 2 \n");
+    i++, j++;
+    if ( i >= 0 && j >= 0 && i < n && j< m) {
+     if ( matriz [i][j] == 0 ){
+      printf("encontrou o 0 \n");
+       contador++;
+       matriz [i][j] = 1;
+       if ( contador > cont ){
+         cont = contador;
+        }
+        i--, j--;
+        matriz [i][j] = 0;
+        i--, j--;
+        matriz [i][j] = 0;
+        i++, j++;
+        i++, j++;
+        contador = encontraDiagonal(matriz,i,j,contador, cont);
+        contador--;
+      }
+    }
+    i--, j--;
+    matriz [i][j] = 2;
+   }
+  }
+  i--, j--;
+  matriz [i][j] = 1;
+
+
+// ENCONTRA DIAGONAL INFERIOR ESQUERDA
+
+  i-- , j--;  
+  if ( i >= 0 && j >= 0 && i < n && j < m) {
+   if ( matriz [i][j] == 2 ){
+    printf("encontrou o 2 \n");
+    i--, j--;
+    if ( i >= 0 && j >= 0 && i < n && j< m) {
+     if ( matriz [i][j] == 0 ){
+      printf("encontrou o 0 \n");
+       contador++;
+       matriz [i][j] = 1;
+       if ( contador > cont ){
+         cont = contador;
+         }
+        i++, j++;
+        matriz [i][j] = 0;
+        i++, j++;
+        matriz [i][j] = 0;
+        i--, j--;
+        i--, j--;
+        contador = encontraDiagonal(matriz, i, j, contador,cont);
+        contador--;
+      }
+    }
+    i++, j++;
+    matriz [i][j] = 2;
+   }
+  }
+  i++, j++;
+  matriz [i][j] = 1;
+
+
+// ENCONTRA DIAGONAL INFERIOR DIREITA
+
+  i-- , j++;  
+  if ( i >= 0 && j >= 0 && i < n && j < m) {
+   if ( matriz [i][j] == 2 ){
+    printf("encontrou o 2 \n");
+    i--, j++;
+    if ( i >= 0 && j >= 0 && i < n && j< m) {
+     if ( matriz [i][j] == 0 ){
+      printf("encontrou o 0 \n");
+       contador++;
+       matriz [i][j] = 1;
+       if ( contador > cont ){
+         cont = contador;
+         }
+        i++, j--;
+        matriz [i][j] = 0;
+        i++, j--;
+        matriz [i][j] = 0;
+        i--, j++;
+        i--, j++;
+        contador = encontraDiagonal(matriz, i, j, contador, cont);
+        contador--;
+      }
+    }
+    i++, j--;
+    matriz [i][j] = 2;
+   }
+  }
+  i++, j--;
+  matriz [i][j] = 1;
+
+
+  return cont;
 }
+
