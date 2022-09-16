@@ -1,18 +1,26 @@
-all: programa
+SRC_DIR := src
+OBJ_DIR := obj
 
-run: programa
+EXE := tp1
+SRC := $(wildcard $(SRC_DIR)/*.c)
+OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-programa: main.o tp1.o 
-	gcc main.o menu.o sort.o -o programa
+CFLAGS   := -Wall -Iinclude
+LDFLAGS  := -Llib
+LDLIBS   := 
 
-main.o: main.c
-	gcc -c main.c
+.PHONY: all clean
 
-menus.o: menu.c menu.h
-	gcc -c menu.c 
+all: $(EXE)
 
-sort.o: sort.c sort.h
-	gcc -c sort.c 
+$(EXE): $(OBJ)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $@
 
 clean:
-	rm -r *.o programa
+	@$(RM) -rv $(OBJ_DIR)
